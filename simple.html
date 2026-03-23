@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>簡單測試（無圖片）</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      text-align: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      margin: 0;
+    }
+    .box {
+      background: white;
+      padding: 3rem;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+    h1 {
+      color: #667eea;
+      margin: 0;
+    }
+    .time {
+      color: #666;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+    }
+    .status {
+      background: #c8e6c9;
+      color: #2e7d32;
+      padding: 1rem;
+      border-radius: 5px;
+      margin: 1.5rem 0;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .note {
+      background: #fff9c4;
+      border-left: 4px solid #f9a825;
+      padding: 1rem;
+      text-align: left;
+      border-radius: 5px;
+      margin-top: 1.5rem;
+    }
+    .error-box {
+      background: #ffebee;
+      border-left: 4px solid #c62828;
+      padding: 1rem;
+      text-align: left;
+      border-radius: 5px;
+      margin-top: 1.5rem;
+    }
+    code {
+      background: #f5f5f5;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>✅ GitHub Pages 正常運作</h1>
+    <p class="time">時間：<span id="time"></span></p>
+    
+    <div class="status">
+      如果您看到此訊息，說明 GitHub Pages 伺服器正常
+    </div>
+
+    <h2>📋 診斷資訊</h2>
+    
+    <div class="error-box">
+      <h3>⚠️ 檔案上傳問題</h3>
+      <p>圖片仍然無法顯示，最可能的原因是：</p>
+      <ul>
+        <li><strong>LOGO們 資料夾中的 PNG 檔案未被上傳到 GitHub</strong></li>
+        <li>檔案存在於本地但 git 沒有追蹤它們</li>
+        <li>.gitignore 可能排除了圖片檔案</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      <h3>🔧 立即修復步驟</h3>
+      <p>請在 VS Code 終端執行以下命令：</p>
+      <ol>
+        <li>查看檔案追蹤狀態：
+          <br><code>cd /workspaces/testing && git ls-files | grep -i logo</code></li>
+        <li>如果沒有出現 LOGO們 中的 PNG 檔案，執行：
+          <br><code>git add LOGO們/*.png</code></li>
+        <li>提交並推送：
+          <br><code>git commit -m "Upload image files to GitHub" && git push</code></li>
+      </ol>
+    </div>
+
+    <div class="note">
+      <h3>✅ 成功指標</h3>
+      <p>完成上述步驟後，訪問 GitHub 倉庫驗證：</p>
+      <p><code>https://github.com/isufilmtv12nd-web/testing</code></p>
+      <p>確認 <code>LOGO們/</code> 資料夾中能看到三個 PNG 檔案</p>
+    </div>
+
+    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd;">
+      <p><small>此頁面用於驗證 GitHub Pages 是否正常運作</small></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('time').textContent = new Date().toLocaleString('zh-TW');
+  </script>
+</body>
+</html>
