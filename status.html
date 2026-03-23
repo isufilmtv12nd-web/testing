@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Pages 測試</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>✅ 如果您看到此訊息，GitHub Pages 正常運作！</h1>
+  <p>時間: <span id="time"></span></p>
+  <h2>📁 檔案狀態檢查</h2>
+  <p>嘗試加載相對路徑圖片...</p>
+  <img src="LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%903.png" 
+       alt="test" 
+       style="max-width: 300px; border: 2px solid #ccc;"
+       onerror="document.body.innerHTML += '<p style=\"color: red;\">❌ 相對路徑不工作 - LOGO們 檔案夾可能不存在或未被提交</p>'"
+       onload="document.body.innerHTML += '<p style=\"color: green;\">✅ 相對路徑工作正常！</p>'">
+  
+  <script>
+    document.getElementById('time').textContent = new Date().toLocaleString('zh-TW');
+  </script>
+</body>
+</html>

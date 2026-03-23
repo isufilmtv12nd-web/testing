@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>完整圖片加載測試</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+    h1 {
+      text-align: center;
+      color: #667eea;
+    }
+    .test-group {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+    .test-group h2 {
+      margin-top: 0;
+      color: #667eea;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 0.5rem;
+    }
+    .test-item {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: white;
+      border-left: 4px solid #ddd;
+      border-radius: 4px;
+    }
+    .test-item h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1rem;
+    }
+    .url-box {
+      background: #f5f5f5;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      margin: 0.5rem 0;
+    }
+    img {
+      max-width: 100%;
+      max-height: 200px;
+      margin: 1rem 0;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+    }
+    .status {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+    .success {
+      background: #c8e6c9;
+      color: #2e7d32;
+    }
+    .error {
+      background: #ffcdd2;
+      color: #c62828;
+    }
+    .note {
+      background: #fff9c4;
+      border-left: 4px solid #f9a825;
+      padding: 1rem;
+      border-radius: 4px;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 完整圖片加載診斷</h1>
+    
+    <!-- 測試 1: 相對路徑 -->
+    <div class="test-group">
+      <h2>方案 1: 相對路徑（優先）</h2>
+      
+      <div class="test-item">
+        <h3>透明的孩子 3.png</h3>
+        <div class="url-box">LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%903.png</div>
+        <img src="LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%903.png" 
+             alt="test" 
+             onerror="this.nextElementSibling.innerHTML='<span class=error>❌ 加載失敗</span>'"
+             onload="this.nextElementSibling.innerHTML='<span class=success>✅ 加載成功</span>'">
+        <div id="r1"></div>
+      </div>
+
+      <div class="test-item">
+        <h3>主視覺 logo.png</h3>
+        <div class="url-box">LOGO%E5%80%91/%E4%B8%BB%E8%A6%96%E8%A6%BAlogo.png</div>
+        <img src="LOGO%E5%80%91/%E4%B8%BB%E8%A6%96%E8%A6%BAlogo.png" 
+             alt="test" 
+             onerror="this.nextElementSibling.innerHTML='<span class=error>❌ 加載失敗</span>'"
+             onload="this.nextElementSibling.innerHTML='<span class=success>✅ 加載成功</span>'">
+        <div></div>
+      </div>
+
+      <div class="test-item">
+        <h3>透明的孩子 s.png</h3>
+        <div class="url-box">LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%90s.png</div>
+        <img src="LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%90s.png" 
+             alt="test" 
+             onerror="this.nextElementSibling.innerHTML='<span class=error>❌ 加載失敗</span>'"
+             onload="this.nextElementSibling.innerHTML='<span class=success>✅ 加載成功</span>'">
+        <div></div>
+      </div>
+    </div>
+
+    <!-- 測試 2: GitHub Pages 直接 URL -->
+    <div class="test-group">
+      <h2>方案 2: GitHub Pages 直接 URL</h2>
+      
+      <div class="test-item">
+        <h3>透明的孩子 3.png</h3>
+        <div class="url-box">https://isufilmtv12nd-web.github.io/testing/LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%903.png</div>
+        <img src="https://isufilmtv12nd-web.github.io/testing/LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%903.png" 
+             alt="test" 
+             onerror="this.nextElementSibling.innerHTML='<span class=error>❌ 加載失敗</span>'"
+             onload="this.nextElementSibling.innerHTML='<span class=success>✅ 加載成功</span>'">
+        <div></div>
+      </div>
+
+      <div class="test-item">
+        <h3>主視覺 logo.png</h3>
+        <div class="url-box">https://isufilmtv12nd-web.github.io/testing/LOGO%E5%80%91/%E4%B8%BB%E8%A6%96%E8%A6%BAlogo.png</div>
+        <img src="https://isufilmtv12nd-web.github.io/testing/LOGO%E5%80%91/%E4%B8%BB%E8%A6%96%E8%A6%BAlogo.png" 
+             alt="test" 
+             onerror="this.nextElementSibling.innerHTML='<span class=error>❌ 加載失敗</span>'"
+             onload="this.nextElementSibling.innerHTML='<span class=success>✅ 加載成功</span>'">
+        <div></div>
+      </div>
+
+      <div class="test-item">
+        <h3>透明的孩子 s.png</h3>
+        <div class="url-box">https://isufilmtv12nd-web.github.io/testing/LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%90s.png</div>
+        <img src="https://isufilmtv12nd-web.github.io/testing/LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%90s.png" 
+             alt="test" 
+             onerror="this.nextElementSibling.innerHTML='<span class=error>❌ 加載失敗</span>'"
+             onload="this.nextElementSibling.innerHTML='<span class=success>✅ 加載成功</span>'">
+        <div></div>
+      </div>
+    </div>
+
+    <!-- 測試 3: Raw GitHub URL -->
+    <div class="test-group">
+      <h2>方案 3: Raw GitHub URL（檢視原始檔案）</h2>
+      
+      <div class="test-item">
+        <h3>透明的孩子 3.png</h3>
+        <div class="url-box">https://raw.githubusercontent.com/isufilmtv12nd-web/testing/main/LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%903.png</div>
+        <img src="https://raw.githubusercontent.com/isufilmtv12nd-web/testing/main/LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%903.png" 
+             alt="test" 
+             onerror="this.nextElementSibling.innerHTML='<span class=error>❌ 加載失敗</span>'"
+             onload="this.nextElementSibling.innerHTML='<span class=success>✅ 加載成功</span>'">
+        <div></div>
+      </div>
+
+      <div class="test-item">
+        <h3>主視覺 logo.png</h3>
+        <div class="url-box">https://raw.githubusercontent.com/isufilmtv12nd-web/testing/main/LOGO%E5%80%91/%E4%B8%BB%E8%A6%96%E8%A6%BAlogo.png</div>
+        <img src="https://raw.githubusercontent.com/isufilmtv12nd-web/testing/main/LOGO%E5%80%91/%E4%B8%BB%E8%A6%96%E8%A6%BAlogo.png" 
+             alt="test" 
+             onerror="this.nextElementSibling.innerHTML='<span class=error>❌ 加載失敗</span>'"
+             onload="this.nextElementSibling.innerHTML='<span class=success>✅ 加載成功</span>'">
+        <div></div>
+      </div>
+
+      <div class="test-item">
+        <h3>透明的孩子 s.png</h3>
+        <div class="url-box">https://raw.githubusercontent.com/isufilmtv12nd-web/testing/main/LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%90s.png</div>
+        <img src="https://raw.githubusercontent.com/isufilmtv12nd-web/testing/main/LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%90s.png" 
+             alt="test" 
+             onerror="this.nextElementSibling.innerHTML='<span class=error>❌ 加載失敗</span>'"
+             onload="this.nextElementSibling.innerHTML='<span class=success>✅ 加載成功</span>'">
+        <div></div>
+      </div>
+    </div>
+
+    <!-- 注意事項 -->
+    <div class="note">
+      <h3>📌 重要事項</h3>
+      <ul>
+        <li>✅ 如果「方案 1」成功，您的圖片已正確上傳到 GitHub Pages</li>
+        <li>✅ 如果「方案 2」成功，表示 GitHub Pages 已正常顯示您的檔案</li>
+        <li>✅ 如果「方案 3」成功，表示檔案在 GitHub 原始倉庫中存在</li>
+        <li>❌ 如果全部失敗，表示圖片檔案未被上傳到 GitHub</li>
+      </ul>
+    </div>
+
+    <!-- 後續步驟 -->
+    <div class="note" style="background: #e3f2fd; border-left-color: #1976d2;">
+      <h3>🎯 根據測試結果採取行動</h3>
+      <p><strong>如果全部失敗：</strong></p>
+      <ol>
+        <li>請在 VS Code 終端執行：<code>cd /workspaces/testing && git status</code></li>
+        <li>檢查 LOGO們 資料夾中的圖片是否被追蹤</li>
+        <li>如果未被追蹤，執行：<code>git add LOGO們/ && git commit -m "Add images" && git push</code></li>
+      </ol>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #e0e0e0;">
+      <p>📅 最後更新：<span id="time"></span></p>
+      <p><small>此診斷頁面會自動檢測図片載入狀態</small></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('time').textContent = new Date().toLocaleString('zh-TW');
+  </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圖片加載診斷</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f5f5f5;
+    }
+    .test {
+      background: white;
+      padding: 1rem;
+      margin: 1rem 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .test h3 {
+      margin-top: 0;
+    }
+    img {
+      max-width: 300px;
+      margin: 1rem 0;
+      border: 2px solid #ccc;
+    }
+    .error {
+      color: red;
+      background: #ffe0e0;
+      padding: 0.5rem;
+      border-radius: 3px;
+    }
+    .success {
+      color: green;
+      background: #e0ffe0;
+      padding: 0.5rem;
+      border-radius: 3px;
+    }
+    pre {
+      background: #f0f0f0;
+      padding: 0.5rem;
+      overflow-x: auto;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 圖片加載診斷</h1>
+  
+  <div class="test">
+    <h3>測試 1: 透明的孩子3.png (相對路徑)</h3>
+    <p>URL: <code>LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%903.png</code></p>
+    <img src="LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%903.png" 
+         alt="透明的孩子3" 
+         onerror="document.getElementById('test1').innerHTML='<span class=\"error\">❌ 圖片加載失敗</span>'"
+         onload="document.getElementById('test1').innerHTML='<span class=\"success\">✅ 圖片加載成功</span>'">
+    <div id="test1"></div>
+  </div>
+
+  <div class="test">
+    <h3>測試 2: 主視覺logo.png (相對路徑)</h3>
+    <p>URL: <code>LOGO%E5%80%91/%E4%B8%BB%E8%A6%96%E8%A6%BAlogo.png</code></p>
+    <img src="LOGO%E5%80%91/%E4%B8%BB%E8%A6%96%E8%A6%BAlogo.png" 
+         alt="主視覺logo" 
+         onerror="document.getElementById('test2').innerHTML='<span class=\"error\">❌ 圖片加載失敗</span>'"
+         onload="document.getElementById('test2').innerHTML='<span class=\"success\">✅ 圖片加載成功</span>'">
+    <div id="test2"></div>
+  </div>
+
+  <div class="test">
+    <h3>測試 3: 透明的孩子s.png (相對路徑)</h3>
+    <p>URL: <code>LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%90s.png</code></p>
+    <img src="LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%90s.png" 
+         alt="透明的孩子s" 
+         onerror="document.getElementById('test3').innerHTML='<span class=\"error\">❌ 圖片加載失敗</span>'"
+         onload="document.getElementById('test3').innerHTML='<span class=\"success\">✅ 圖片加載成功</span>'">
+    <div id="test3"></div>
+  </div>
+
+  <div class="test">
+    <h3>💡 可能的解決方案</h3>
+    <p>如果上面所有圖片都無法加載，問題可能是：</p>
+    <ol>
+      <li><strong>圖片文件不在 GitHub 的 LOGO們 資料夾中</strong></li>
+      <li><strong>檔案名稱與預期不符</strong> - 可能大小寫不同或有空格</li>
+      <li><strong>GitHub API 速率限制</strong></li>
+    </ol>
+    
+    <h3>✅ 替代方案</h3>
+    <p>我們可以在 GitHub Pages 上直接引用本地檔案，而不是使用 raw.githubusercontent.com。</p>
+    <p>新 URL 格式：<code>https://isufilmtv12nd-web.github.io/testing/LOGO們/檔案名稱.png</code></p>
+  </div>
+
+  <script>
+    console.log('頁面已加載，檢查圖片...');
+  </script>
+</body>
+</html>
