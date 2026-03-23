@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>發光圖片效果</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      font-family: Arial, sans-serif;
+    }
+    
+    .container {
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    h1 {
+      color: white;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    }
+    
+    img {
+      filter: drop-shadow(0 0 15px #ffd700) drop-shadow(0 0 30px rgba(255, 215, 0, 0.6));
+      animation: sparkle 2s infinite;
+      transition: transform 0.3s ease;
+      border-radius: 10px;
+    }
+    
+    img:hover {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 25px #ffd700) drop-shadow(0 0 40px rgba(255, 215, 0, 0.8));
+    }
+    
+    @keyframes sparkle {
+      0%, 100% {
+        filter: drop-shadow(0 0 15px #ffd700) drop-shadow(0 0 30px rgba(255, 215, 0, 0.6));
+      }
+      50% {
+        filter: drop-shadow(0 0 25px #ffffff) drop-shadow(0 0 40px rgba(255, 215, 0, 0.8));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>✨ 透明的孩子Logo ✨</h1>
+    <img src="https://raw.githubusercontent.com/isufilmtv12nd-web/testing/main/透明的孩子logo/透明的孩子3.png" 
+         alt="發光圖片" 
+         width="400">
+  </div>
+</body>
+</html>
