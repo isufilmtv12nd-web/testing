@@ -1,1 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Production Team Final</title>
 
+  <style>
+    /* 基礎重設：鎖死寬度，根除白邊 */
+    * {
+      box-sizing: border-box !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100% !important;
+      background: transparent !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow-x: hidden !important; /* 絕對鎖死左右捲動 */
+    }
+
+    .app {
+      width: 100% !important;
+      display: flex;
+      justify-content: center;
+      padding: 15px 0 80px;
+    }
+
+    .wrap {
+      width: 96%;
+      max-width: 1000px;
+    }
+
+    /* 一行四人佈局 */
+    .crew-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr) !important; 
+      gap: 5px;
+      width: 100% !important;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      background: #1c1c1e;
+      will-change: transform;
+      transform: translateZ(0); 
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-back {
+      display: none;
+      background: #ffffff;
+      padding: 4px;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #1d1d1f;
+    }
+
+    .card.flipped .card-front { display: none; }
+    .card.flipped .card-back { display: flex; }
+
+    /* 文字自動縮放與換行邏輯：確保長職稱不被切斷 */
+    .role-zh { font-size: clamp(8px, 2.5vw, 12px); font-weight: 700; line-height: 1.1; margin-bottom: 1px !important; }
+    .role-en { 
+      font-size: clamp(4.5px, 1.3vw, 7.5px); 
+      color: #86868b; 
+      text-transform: uppercase; 
+      margin-bottom: 3px !important; 
+      line-height: 1;
+      width: 100%;
+      word-wrap: break-word; /* 長單字自動折行 */
+      letter-spacing: -0.2px;
+    }
+    
+    .divider {
+      width: 10px;
+      height: 1px;
+      background: rgba(0,0,0,0.1);
+      margin-bottom: 3px !important;
+    }
+
+    .name-zh { font-size: clamp(8px, 2.2vw, 11px); font-weight: 600; line-height: 1.1; }
+    .name-en { font-size: clamp(5px, 1.3vw, 6.5px); color: #86868b; text-transform: uppercase; margin-top: 1px !important; }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="wrap">
+      <div class="crew-grid" id="crewGrid"></div>
+    </div>
+  </div>
+
+  <script>
+    /* 嚴格採用你提供的原始完整名字與職稱 */
+    const data = [
+      { name: "王可穎 ONG HO WING", role: "導演 DIRECTOR", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/495884680065746fa3a1adac8a1dfa3dbbc61b93/%E5%B0%8E%E6%BC%94-%E7%8E%8B%E5%8F%AF%E7%A9%8E%20%7C%20DSCF4395.JPEG" },
+      { name: "周聖諺 CHOU SHENG IAN", role: "執行導演 EXECUTIVE DIRECTOR", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/696aeac3cd3daae6a24d1af96649296b22c75718/%E5%9F%B7%E8%A1%8C%E5%B0%8E%E6%BC%94-%E5%91%A8%E8%81%96%E8%AB%BA%20%7C%20DSCF3697.JPEG" },
+      { name: "吳穎姿 WU YING TZU", role: "副導演 ASSISTANT DIRECTOR", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/981bf4c4fb94c9db6dbbcdf8ebf03d737a908eb9/%E5%89%AF%E5%B0%8E-%E5%90%B3%E7%A9%8E%E5%A7%BF%20%7C%20DSCF4064.JPEG" },
+      { name: "林思彥 LIM SHI YAN", role: "製片 LINE PRODUCER", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/72d6f7501b092bd9c557b22c288e8271bb8adc63/%E8%A3%BD%E7%89%87-%E6%9E%97%E6%80%9D%E5%BD%A5%20%7C%20DSCF3559.JPEG" },
+      { name: "施會深 SIK HUI SHEN", role: "製片 LINE PRODUCER", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/5dac0d8876465194dc5a1f53480afcb90a21534c/%E8%A3%BD%E7%89%87-%E6%96%BD%E6%9C%83%E6%B7%B1%20%7C%20DSCF4358.JPEG" },
+      { name: "葉焯嵐 IP CHUEK LAAM", role: "攝影師 CINEMATOGRAPHER", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/5dac0d8876465194dc5a1f53480afcb90a21534c/%E6%94%9D%E5%BD%B1-%E8%91%89%E7%84%AF%E5%B5%90%20%7C%20DSC_1054.JPEG" },
+      { name: "王梓銘 HING ZI MING", role: "燈光師 GAFFER", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/5dac0d8876465194dc5a1f53480afcb90a21534c/%E7%87%88%E5%85%89-%E7%8E%8B%E6%A2%93%E9%8A%98%20%7C%20DSC_1001.JPEG" },
+      { name: "梁樂宸 LIANG LE CHEN", role: "燈光師 GAFFER", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/5dac0d8876465194dc5a1f53480afcb90a21534c/%E7%87%88%E5%85%89-%E6%A2%81%E6%A8%82%E5%AE%B8%20%7C%20DSC_0976.JPEG" },
+      { name: "蔡菱庭 TSAI LING TING", role: "美術設計 PRODUCTION DESIGNER", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/72d6f7501b092bd9c557b22c288e8271bb8adc63/%E7%BE%8E%E8%A1%93-%E8%94%A1%E8%8F%B1%E5%BA%AD%20%7C%20DSCF0858.JPEG" },
+      { name: "陳又榛 CHEN YU CHEN", role: "美術設計 PRODUCTION DESIGNER", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/ca37adefbf0183fa075e656062cf5c53350a4974/%E7%BE%8E%E8%A1%93-%E9%99%B3%E5%8F%88%E6%A6%9B%20%7C%20DSCF0495.JPEG" },
+      { name: "蘇品伃 SU PIN YU", role: "造型設計 STYLIST", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/5dac0d8876465194dc5a1f53480afcb90a21534c/%E6%9C%8D%E5%8C%96-%E8%98%87%E5%93%81%E4%BC%83%20%7C%20DSCF7217.JPEG" },
+      { name: "王于庭 WANG YU TING", role: "造型設計 STYLIST", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/5dac0d8876465194dc5a1f53480afcb90a21534c/%E6%9C%8D%E5%8C%96-%E7%8E%8B%E4%BA%8E%E5%BA%AD%20%7C%20DSCF0302.JPEG" },
+      { name: "施雅馨 SHIH YA HSIN", role: "聲音設計 SOUND MIXER", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/72d6f7501b092bd9c557b22c288e8271bb8adc63/%E8%81%B2%E9%9F%B3-%E6%96%BD%E9%9B%85%E9%A6%A8%20%7C%20DSCF3708.JPEG" },
+      { name: "周聖諺 CHOU SHENG IAN", role: "剪輯 EDITOR", photo: "https://raw.githubusercontent.com/isufilmtv12nd-web/testing/696aeac3cd3daae6a24d1af96649296b22c75718/%E5%9F%B7%E8%A1%8C%E5%B0%8E%E6%BC%94-%E5%91%A8%E8%81%96%E8%AB%BA%20%7C%20DSCF3697.JPEG" }
+    ];
+
+    const grid = document.getElementById("crewGrid");
+
+    function splitText(text) {
+      const parts = text.trim().split(/\s+/);
+      const zh = parts[0] || "";
+      const en = parts.slice(1).join(" ") || "";
+      return { zh, en };
+    }
+
+    function render() {
+      grid.innerHTML = data.map((m) => {
+        const role = splitText(m.role);
+        const name = splitText(m.name);
+        return `
+          <div class="card" onclick="this.classList.toggle('flipped')">
+            <div class="card-front">
+              <img src="${m.photo}" loading="lazy" decoding="async" alt="${m.name}">
+            </div>
+            <div class="card-back">
+              <div class="role-zh">${role.zh}</div>
+              <div class="role-en">${role.en}</div>
+              <div class="divider"></div>
+              <div class="name-zh">${name.zh}</div>
+              <div class="name-en">${name.en}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+    render();
+  </script>
+</body>
+</html>
