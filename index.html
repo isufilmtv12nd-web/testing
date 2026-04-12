@@ -1,65 +1,473 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>發光圖片效果</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CAST</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    * { box-sizing: border-box; }
+
+    :root{
+      --bg: transparent;
+      --card: rgba(255,255,255,0.88);
+      --card-strong: rgba(255,255,255,0.96);
+      --text: #111111;
+      --sub: rgba(17,17,17,0.55);
+      --line: rgba(17,17,17,0.08);
+      --shadow: 0 18px 50px rgba(0,0,0,0.08);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --accent: #7a1f1f;
     }
-    
-    body {
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      background: var(--bg);
+      font-family: "Inter", "Noto Serif TC", sans-serif;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    body{
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      padding: 14px;
+    }
+
+    /* Google Sites 穩定嵌入主容器 */
+    .embed-shell{
+      width: min(100%, 980px);
+      height: min(78vh, 620px);
+      min-height: 420px;
+      border-radius: 32px;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .embed-shell::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.95), transparent 35%),
+        linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.58));
+      pointer-events:none;
+    }
+
+    .frame{
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 0;
+    }
+
+    .sidebar{
+      border-right: 1px solid var(--line);
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(255,255,255,0.36);
+    }
+
+    .section-label{
+      font-size: 0.78rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 14px;
+      padding-left: 6px;
+    }
+
+    .section-title{
+      font-family: "Noto Serif TC", serif;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      margin: 0 0 26px 0;
+      padding-left: 6px;
+      color: var(--text);
+    }
+
+    .cast-list{
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .cast-btn{
+      width: 100%;
+      border: 1px solid transparent;
       background: transparent;
-      font-family: Arial, sans-serif;
+      border-radius: 22px;
+      padding: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.28s ease;
+      text-align: left;
     }
-    
-    .container {
-      text-align: center;
-      padding: 2rem;
+
+    .cast-btn:hover{
+      background: rgba(255,255,255,0.68);
+      border-color: rgba(17,17,17,0.06);
+      transform: translateY(-1px);
     }
-    
-    h1 {
-      color: white;
-      margin-bottom: 2rem;
-      font-size: 2.5rem;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+
+    .cast-btn.active{
+      background: var(--card-strong);
+      border-color: rgba(17,17,17,0.08);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
     }
-    
-    img {
-      filter: drop-shadow(0 0 15px #ffd700) drop-shadow(0 0 30px rgba(255, 215, 0, 0.6));
-      animation: sparkle 2s infinite;
-      transition: transform 0.3s ease;
-      border-radius: 10px;
+
+    .cast-thumb{
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex: 0 0 64px;
+      border: 1px solid rgba(17,17,17,0.08);
+      background: #f3f3f3;
     }
-    
-    img:hover {
-      transform: scale(1.05);
-      filter: drop-shadow(0 0 25px #ffd700) drop-shadow(0 0 40px rgba(255, 215, 0, 0.8));
+
+    .cast-thumb img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
-    
-    @keyframes sparkle {
-      0%, 100% {
-        filter: drop-shadow(0 0 15px #ffd700) drop-shadow(0 0 30px rgba(255, 215, 0, 0.6));
+
+    .cast-meta{
+      min-width: 0;
+    }
+
+    .cast-role{
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      color: var(--sub);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .cast-name{
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.35;
+    }
+
+    .detail{
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .detail-card{
+      width: 100%;
+      height: 100%;
+      border-radius: var(--radius-xl);
+      background: var(--card);
+      border: 1px solid rgba(17,17,17,0.06);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.06);
+      display: grid;
+      grid-template-columns: minmax(280px, 420px) 1fr;
+      overflow: hidden;
+    }
+
+    .visual{
+      background: linear-gradient(180deg, #f8f8f8, #efefef);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .visual-frame{
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #ffffff;
+      border: 1px solid rgba(17,17,17,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .visual-frame img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #fff;
+    }
+
+    .info{
+      padding: 36px 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .eyebrow{
+      font-size: 0.78rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .name-cn{
+      font-family: "Noto Serif TC", serif;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.08;
+      font-weight: 900;
+      margin: 0;
+      letter-spacing: 0.08em;
+      color: var(--text);
+    }
+
+    .name-en{
+      margin-top: 10px;
+      font-size: 0.95rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sub);
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .divider{
+      width: 48px;
+      height: 1px;
+      background: rgba(17,17,17,0.12);
+      margin: 24px 0 18px;
+    }
+
+    .as-label{
+      font-size: 0.78rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .role-large{
+      font-family: "Noto Serif TC", serif;
+      font-size: clamp(1.4rem, 2.4vw, 2rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .note{
+      margin-top: 20px;
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: rgba(17,17,17,0.68);
+      max-width: 28em;
+    }
+
+    @media (max-width: 860px){
+      body{
+        min-height: auto;
+        padding: 10px;
       }
-      50% {
-        filter: drop-shadow(0 0 25px #ffffff) drop-shadow(0 0 40px rgba(255, 215, 0, 0.8));
+
+      .embed-shell{
+        height: auto;
+        min-height: unset;
+      }
+
+      .frame{
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar{
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+        padding: 22px 16px 14px;
+      }
+
+      .section-title{
+        font-size: 1.5rem;
+        margin-bottom: 16px;
+      }
+
+      .cast-list{
+        flex-direction: row;
+        gap: 10px;
+      }
+
+      .cast-btn{
+        flex: 1;
+        min-width: 0;
+        padding: 10px;
+        border-radius: 18px;
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+
+      .cast-thumb{
+        width: 68px;
+        height: 68px;
+        flex-basis: 68px;
+      }
+
+      .detail{
+        padding: 14px;
+      }
+
+      .detail-card{
+        grid-template-columns: 1fr;
+      }
+
+      .visual{
+        padding: 14px 14px 0;
+      }
+
+      .visual-frame{
+        aspect-ratio: 4 / 5;
+        height: auto;
+      }
+
+      .info{
+        padding: 24px 20px 26px;
+        text-align: center;
+        align-items: center;
+      }
+
+      .divider{
+        margin: 18px 0 14px;
+      }
+
+      .note{
+        max-width: none;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="LOGO%E5%80%91/%E9%80%8F%E6%98%8E%E7%9A%84%E5%AD%A9%E5%AD%90s.png" 
-         alt="發光圖片" 
-         width="400"
-         style="aspect-ratio: 19/6;">
+  <div class="embed-shell">
+    <div class="frame">
+
+      <aside class="sidebar">
+        <div class="section-label">Film Cast</div>
+        <h1 class="section-title">演員 CAST</h1>
+
+        <div class="cast-list">
+          <button class="cast-btn active"
+            data-cn="左晨"
+            data-en="CHEN ZUO"
+            data-role="EVAN"
+            data-img="https://raw.githubusercontent.com/isufilmtv12nd-web/testing/5b696f407e250bd93e7448f7a8b5a6b07c7208c2/Screenshot%202026-04-13%20at%2005.06.20.png">
+            <div class="cast-thumb">
+              <img src="https://raw.githubusercontent.com/isufilmtv12nd-web/testing/5b696f407e250bd93e7448f7a8b5a6b07c7208c2/Screenshot%202026-04-13%20at%2005.06.20.png" alt="左晨 CHEN ZUO">
+            </div>
+            <div class="cast-meta">
+              <div class="cast-role">EVAN</div>
+              <div class="cast-name">左晨 / CHEN ZUO</div>
+            </div>
+          </button>
+
+          <button class="cast-btn"
+            data-cn="凃家瑗"
+            data-en="JIAYUAN TU"
+            data-role="靜瀾"
+            data-img="https://raw.githubusercontent.com/isufilmtv12nd-web/testing/5b696f407e250bd93e7448f7a8b5a6b07c7208c2/%E9%9D%9C%E7%80%BE.JPG">
+            <div class="cast-thumb">
+              <img src="https://raw.githubusercontent.com/isufilmtv12nd-web/testing/5b696f407e250bd93e7448f7a8b5a6b07c7208c2/%E9%9D%9C%E7%80%BE.JPG" alt="凃家瑗 JIAYUAN TU">
+            </div>
+            <div class="cast-meta">
+              <div class="cast-role">靜瀾</div>
+              <div class="cast-name">凃家瑗 / JIAYUAN TU</div>
+            </div>
+          </button>
+        </div>
+      </aside>
+
+      <main class="detail">
+        <div class="detail-card">
+          <div class="visual">
+            <div class="visual-frame">
+              <img id="mainImage"
+                src="https://raw.githubusercontent.com/isufilmtv12nd-web/testing/5b696f407e250bd93e7448f7a8b5a6b07c7208c2/Screenshot%202026-04-13%20at%2005.06.20.png"
+                alt="Cast Portrait">
+            </div>
+          </div>
+
+          <div class="info">
+            <div class="eyebrow">Featured Cast</div>
+            <h2 class="name-cn" id="nameCn">左晨</h2>
+            <div class="name-en" id="nameEn">CHEN ZUO</div>
+
+            <div class="divider"></div>
+
+            <div class="as-label">飾演 AS</div>
+            <div class="role-large" id="roleName">EVAN</div>
+
+            <div class="note" id="descText">
+              以極簡、沉靜的方式呈現角色與演員，適合展覽頁面與 Google Sites 內嵌展示。
+            </div>
+          </div>
+        </div>
+      </main>
+
+    </div>
   </div>
+
+  <script>
+    const buttons = document.querySelectorAll('.cast-btn');
+    const mainImage = document.getElementById('mainImage');
+    const nameCn = document.getElementById('nameCn');
+    const nameEn = document.getElementById('nameEn');
+    const roleName = document.getElementById('roleName');
+    const descText = document.getElementById('descText');
+
+    const descriptions = {
+      "EVAN": "左晨 CHEN ZUO 飾演 EVAN",
+      "靜瀾": "凃家瑗 JIAYUAN TU 飾演 靜瀾"
+    };
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const cn = btn.dataset.cn;
+        const en = btn.dataset.en;
+        const role = btn.dataset.role;
+        const img = btn.dataset.img;
+
+        mainImage.src = img;
+        mainImage.alt = `${cn} ${en}`;
+        nameCn.textContent = cn;
+        nameEn.textContent = en;
+        roleName.textContent = role;
+        descText.textContent = descriptions[role] || `${cn} ${en} 飾演 ${role}`;
+      });
+    });
+  </script>
 </body>
 </html>
